@@ -119,6 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function batalkan(id) {
         const nim = JSON.parse(localStorage.getItem('nim'));
+        // Cek apakah totalVotes sudah mencapai 13
+        if (totalVotes === 13) {
+            // Tampilkan pesan peringatan
+            alert("Anda sudah mencapai batas maksimal pemilihan (13 votes). Tidak dapat membatalkan pilihan lebih lanjut.");
+            return; // Hentikan fungsi jika sudah mencapai batas
+        }
         console.log("Batalkan pilihan kandidat dengan ID:", id);
         console.log("NIM yang memilih:", nim);
         totalVotes-=1;
