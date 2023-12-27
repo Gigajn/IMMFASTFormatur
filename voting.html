@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Add your other head elements -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Your other HTML content -->
+
+    <canvas id="votingChart" width="150vw" height="100vh"></canvas>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch data from API
+        fetch("https://pemilihan-git-main-gigajdn.vercel.app/formatur")
+          .then((response) => response.json())
+          .then((data) => {
+            // Extracting nama and __v from the API response
+            const labels = data.map((item) => item.nama);
+            const values = data.map((item) => item.__v);
+
+            // Creating voting data
+            const votingData = {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Vote Results",
+                  data: values,
+                  backgroundColor: [
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+              ],
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            // Get the chart canvas
+            const chartCanvas = document
+              .getElementById("votingChart")
+              .getContext("2d");
+
+            // Create the bar chart
+            const votingChart = new Chart(chartCanvas, {
+              type: "bar",
+              data: votingData,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            });
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      });
+    </script>
+  </body>
+</html>
