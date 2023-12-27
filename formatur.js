@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {  
-
+  let totalVotes = 0;
 
   async function fetchData() {
     try {
@@ -84,36 +84,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-    function pilih(id) {
-        const nim = JSON.parse(localStorage.getItem('nim'));
-        console.log("Pilih kandidat dengan ID:", id);
-        console.log("NIM yang memilih:", nim);
-
-        // Send data to the backend
-        fetch("https://pemilihan-git-main-gigajdn.vercel.app/vote", {
+  function pilih(id) {
+    const nim = JSON.parse(localStorage.getItem("nim"));    
+    if (totalVotes < 13) {
+      // Pemeriksaan jumlah pemilihan maksimal
+      console.log("Pilih kandidat dengan ID:", id);
+      console.log("NIM yang memilih:", nim);
+      totalVotes+=1;
+      // Kirim data ke backend
+      fetch("https://pemilihan-git-main-gigajdn.vercel.app/vote", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({  nim, 
-                                _id: id }),
-        })
+        body: JSON.stringify({ nim, _id: id }),
+      })
         .then((response) => {
-            // Menampilkan tombol "Batalkan" setelah memilih
-            document.getElementById('batalkanButton-' + id).style.display = 'inline-block';
-            // Menyembunyikan tombol "Pilih" setelah memilih
-            document.getElementById('pilihButton-' + id).style.display = 'none';
+          
+          console.log("Total Votes:", totalVotes);
+          // Menampilkan tombol "Batalkan" setelah memilih
+          document.getElementById("batalkanButton-" + id).style.display =
+            "inline-block";
+          // Menyembunyikan tombol "Pilih" setelah memilih
+          document.getElementById("pilihButton-" + id).style.display = "none";
         })
-
         .catch((error) => {
-            console.error("Error:", error);
-        }); 
-        }
+          console.error("Error:", error);
+        });
+    } else {
+      alert("Anda telah mencapai batas maksimal pemilihan (13 kali).");
+    }
+  }
+  
 
     function batalkan(id) {
         const nim = JSON.parse(localStorage.getItem('nim'));
         console.log("Batalkan pilihan kandidat dengan ID:", id);
         console.log("NIM yang memilih:", nim);
+        totalVotes-=1;
 
         // Send data to the backend
         fetch("https://pemilihan-git-main-gigajdn.vercel.app/delVote", {
@@ -124,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify({  nim, 
                                 _id: id }),
         })
-        .then((response) => {
+        .then((response) => {            
             // Menampilkan tombol "Pilih" setelah membatalkan
             document.getElementById('pilihButton-' + id).style.display = 'inline-block';
             // Menyembunyikan tombol "Batalkan" setelah membatalkan
